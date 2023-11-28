@@ -1,54 +1,53 @@
-<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.3.0/dist/aframe-master.min.js"></script>
-<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AR Demo</title>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script>
+        // We're going to register a custom event listener through a-frame that will fire
+        // whenever a marker has entered the camera view and is found through ar.js
+        AFRAME.registerComponent('registerevents', {
+            init: function() {
+                var marker = this.el;
 
-<style>
-  .arjs-loader {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+                // Element emits events when found and lost
+                marker.setAttribute('emitevents', 'true');
 
-  .arjs-loader div {
-    text-align: center;
-    font-size: 1.25em;
-    color: white;
-  }
-</style>
+                marker.addEventListener('markerFound', function() {
+                    // Alright, a marker has been found. Let's get the video element
+                    var vid = document.getElementById('waterVideo');
 
-<body style="margin : 0px; overflow: hidden;">
-  <!-- minimal loader shown until image descriptors are loaded -->
-  <div class="arjs-loader">
-    <div>Loading, please wait...</div>
-  </div>
-  <a-scene
-    vr-mode-ui="enabled: false;"
-    renderer="logarithmicDepthBuffer: true; precision: medium;"
-    embedded
-    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
-  >
-    <!-- we use cors proxy to avoid cross-origin problems ATTENTION! you need to set up your server -->
-    <a-nft
-      type="nft"
-      url="https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
-      smooth="true"
-      smoothCount="10"
-      smoothTolerance=".01"
-      smoothThreshold="5"
-    >
-      <a-entity
-        url="https://youtu.be/umPWbs9FIuE?si=IESNhF0vUAI66qlW"
-        scale="5 5 5"
-        position="0 0 0"
-      >
-      </a-entity>
-    </a-nft>
-    <a-entity camera></a-entity>
-  </a-scene>
+                    // Make sure that the video a-frame object is visible
+                    document.querySelector('#water').setAttribute('visible', true);
+
+                    // Reset the video to the beginning and play it through
+                    vid.currentTime = 0;                    
+                    vid.play();
+                    
+                    // Once the video has completed, we're going to hide the a-video element
+                    // which will display the a-image element with the watch behind it
+                    vid.addEventListener('ended', function(e) {
+                        document.querySelector('#water').setAttribute('visible', false);
+                    });
+                });
+            }
+        });
+    </script>
+</head>
+<body style="margin:0; overflow:hidden;">
+    <a-scene embedded arjs="" artoolkit="">
+        <a-assets timeout="10000">
+            <img id="watchImage" src="/assets/watch.jpg">
+            <video id="waterVideo" loop="false" autoplay="false" src="/assets/Weihnachten.mp4" preload="auto"></video>
+        </a-assets>
+        <a-marker preset="hiro" registerevents>
+            <a-image id="watch" src="#watchImage" height="2" width="1" position="0 1 0"></a-image>
+            <a-video id="water" src="#waterVideo" height="2" width="1" position="0 1 0" autoplay="false"></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
 </body>
+</html>
