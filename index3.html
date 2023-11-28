@@ -1,0 +1,65 @@
+
+   
+   <!DOCTYPE html>
+   <html>
+     <head>
+   
+   <style>
+        body {
+      margin : 0px; 
+      overflow: hidden;
+    }
+    </style>
+   
+
+    
+   <!-- include A-Frame obviously -->
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+<!-- we import arjs version without NFT but with marker + location based support -->
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
+<body style='margin : 0px; overflow: hidden;'>
+
+       <a-scene>
+   <a-assets>
+        <img id="cursorimage" src="https://cdn4.iconfinder.com/data/icons/cursors-gestures/100/click3-512.png" /> 
+              </a-assets>
+         
+
+              <a-assets>
+                <a-asset-item
+                  id="man"
+                  src="man.glb"
+                >
+                </a-asset-item>
+              </a-assets>
+            
+              <a-marker
+                preset="hiro"
+                raycaster="objects: .clickable"
+                emitevents="true"
+                cursor="fuse: false; rayOrigin: mouse;"
+                id="markerA"
+              >
+                <a-entity
+                  id="man"
+                  gltf-model="#man"
+                  position="0 0 0"
+                  scale="0.5 0.5 0.5"
+                  rotation="-90 0 0"
+                  class="clickable"
+                  gesture-handler
+                >
+                </a-entity>
+              </a-marker>
+         
+        <a-sphere click-drag position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
+        <a-box click-drag position="-1 0.5 1" rotation="0 45 0" width="1" height="1" depth="1"  color="#4CC3D9"></a-box>
+        <a-cylinder click-drag position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+       
+        <a-entity position="0 0 3.8">
+          <a-camera look-controls-enabled="false" keyboard-controls="fpsMode: true"></a-camera>
+        </a-entity>
+      </a-scene>
+    </body>
+  </html>
